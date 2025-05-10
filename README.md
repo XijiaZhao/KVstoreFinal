@@ -1,17 +1,11 @@
 #### Description
-description...
+Code upload for CSDS433 Report
 
 #### Software Architecture
 Software architecture description
 
 #### Installation
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
+pom.xml
 #### Instructions
 
-1.  xxxx
-2.  xxxx
-3.  xxxx

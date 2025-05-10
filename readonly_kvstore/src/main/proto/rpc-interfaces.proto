@@ -1,0 +1,64 @@
+syntax = "proto3";
+package rpc;
+
+option java_multiple_files = false;
+option java_package = "edu.case.kvstore.readonly.rpc";
+option java_outer_classname = "RPCInterface";
+
+
+message WorkerInfoState {
+    int32 myWorkerID = 1; // 当前worker被分配到的ID
+    string hostName = 2; // 进程所在主机的主机名
+    int32 queryServicePort = 3; // 查询进程的query service监听端口号
+    string workerUUID = 4; // 当前进程的唯一UUID编号
+}
+
+message MasterReply {
+    int32 workerID = 1; // 当前Worker被分配到的编号
+    repeated WorkerInfoState workers = 2; // Master上的workers列表
+    MasterState masterState = 3; // 主进程当前状态
+
+    enum MasterState {
+        INIT = 0;
+        WORKING = 1;
+    }
+}
+
+service MasterService {
+    rpc reportHeartbeat (WorkerInfoState) returns (MasterReply) {
+    };
+}
+
+message QueryKey {
+    bytes key = 1;
+}
+
+message QueryReply {
+    bytes val = 1;
+    Errno errno = 2;
+
+    enum Errno {
+        OK = 0;
+        NULL = 1;
+        ERROR = 2;
+    }
+}
+
+message HelloRequest {
+    string greeting = 1;
+}
+
+message HelloReply {
+    string host = 1;
+    int32 port = 2;
+}
+
+service QueryService {
+    rpc get (QueryKey) returns (QueryReply) {};
+    rpc sayHello (HelloRequest) returns (HelloReply);
+}
+
+message KVPair {
+    bytes key = 1;
+    bytes val = 2;
+}
